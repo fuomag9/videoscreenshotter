@@ -39,7 +39,7 @@ import java.io.IOException
 
 
 class MainActivity : ComponentActivity() {
-    companion object bestfriendvideo {
+    companion object CompanionStuff {
         lateinit var Uri: MutableState<Uri?>
         lateinit var exoplayer: SimpleExoPlayer
     }
@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
             VideoScreenshotterTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    mainfunction()
+                    MainFunction()
                 }
             }
         }
@@ -59,8 +59,8 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun mainfunction() {
-    var context = LocalContext.current
+fun MainFunction() {
+    val context = LocalContext.current
     MainActivity.Uri =
         rememberSaveable() { mutableStateOf<Uri?>(null) } //initialize here or it will complain inside the functions :(
     MainActivity.exoplayer = remember(context) {
@@ -163,7 +163,6 @@ private fun OpenDocumentPicker() {
 
 @Composable
 fun VideoPlayer(player2: SimpleExoPlayer, video: MutableState<Uri?>) {
-    // This is the official way to access current context from Composable functions
     val context = LocalContext.current
 
     Column(
