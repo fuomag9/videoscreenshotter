@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.documentfile.provider.DocumentFile
 import com.fuomag9.videoscreenshotter.ui.theme.VideoScreenshotterTheme
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -102,8 +103,9 @@ private fun OpenDocumentPicker() {
         //Todo: get recycle video filename here
         Button(
             onClick = {
-                val filename =
-                    MainActivity.bestfriendvideo.Uri.toString() + "-" + MainActivity.bestfriendvideo.exoplayer.currentPosition.toString() + ".png";
+                val documentFile = DocumentFile.fromSingleUri(context, MainActivity.Uri.value!!)
+                var filename = documentFile!!.name?.substringBeforeLast(".")
+                filename += "-" + MainActivity.exoplayer.currentPosition.toString() + ".png";
                 launchercreate.launch(filename)
             },
             modifier = Modifier.padding(top = 20.dp)
@@ -115,6 +117,8 @@ private fun OpenDocumentPicker() {
 
 
     MainActivity.Uri.value?.let { videoUri ->
+
+        MainActivity.exoplayer.pause() //pause video if it's playing
 
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(context, videoUri)
