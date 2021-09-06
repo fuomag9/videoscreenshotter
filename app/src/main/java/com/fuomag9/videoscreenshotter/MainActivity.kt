@@ -36,6 +36,10 @@ import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import android.content.Intent
+
+
+
 
 
 class MainActivity : ComponentActivity() {
@@ -46,11 +50,21 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val intent = intent
+        val action = intent.action
+        var uri : Uri? = null
+
+        if (Intent.ACTION_VIEW == action) {
+             uri = intent.data
+        }
+
+
         setContent {
             VideoScreenshotterTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    MainFunction()
+                    MainFunction(uri)
                 }
             }
         }
@@ -59,10 +73,11 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MainFunction() {
+fun MainFunction(VideoUri: Uri? = null) {
     val context = LocalContext.current
+    //initialize here or it will complain inside the functions :(
     MainActivity.Uri =
-        rememberSaveable() { mutableStateOf<Uri?>(null) } //initialize here or it will complain inside the functions :(
+        rememberSaveable() { mutableStateOf<Uri?>(VideoUri) }
     MainActivity.exoplayer = remember(context) {
         SimpleExoPlayer.Builder(context).build().apply {
         }
