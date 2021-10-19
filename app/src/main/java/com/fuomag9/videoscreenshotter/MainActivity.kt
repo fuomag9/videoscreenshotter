@@ -81,8 +81,14 @@ fun MainFunction(VideoUri: Uri? = null) {
         }
     }
     Column() {
-        VideoPlayer(MainActivity.exoplayer, MainActivity.Uri)
-        OpenDocumentPicker()
+        Box(modifier = Modifier.weight(4f)){
+            VideoPlayer(MainActivity.exoplayer, MainActivity.Uri)
+        }
+
+        Box(modifier = Modifier.weight(1f)){
+            OpenDocumentPicker()
+        }
+
     }
 
 }
@@ -104,11 +110,10 @@ private fun OpenDocumentPicker() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxSize()
     ) {
         Button(
-            onClick = { launcher.launch(arrayOf("video/*")) },
-            modifier = Modifier.padding(top = 20.dp)
+            onClick = { launcher.launch(arrayOf("video/*")) }
         ) {
             Text(text = "Open video")
         }
@@ -185,9 +190,7 @@ fun VideoPlayer(player2: SimpleExoPlayer, video: MutableState<Uri?>) {
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier
-            .size(width = 400.dp, height = 600.dp)
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         // Do not recreate the player everytime this Composable commits
 
