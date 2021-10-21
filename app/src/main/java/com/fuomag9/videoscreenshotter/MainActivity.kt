@@ -112,11 +112,27 @@ private fun OpenDocumentPicker() {
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        Button(
-            onClick = { launcher.launch(arrayOf("video/*")) }
-        ) {
-            Text(text = "Open video")
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Button(
+                onClick = { MainActivity.exoplayer.seekTo(MainActivity.exoplayer.currentPosition-10) }
+            ) {
+                Text(text = "-10ms")
+            }
+            Button(
+                onClick = { launcher.launch(arrayOf("video/*")) }
+            ) {
+                Text(text = "Open video")
+            }
+            Button(
+                onClick = {MainActivity.exoplayer.seekTo(MainActivity.exoplayer.currentPosition+10)  }
+            ) {
+                Text(text = "+10ms")
+            }
         }
+
+
+
 
         //Todo: get recycle video filename here
         Button(
