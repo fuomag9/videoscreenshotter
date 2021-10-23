@@ -10,10 +10,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +34,13 @@ import java.io.FileOutputStream
 import java.io.IOException
 import android.content.Intent
 import android.widget.Toast
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
+import androidx.core.content.ContextCompat.startActivity
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -51,10 +54,10 @@ class MainActivity : ComponentActivity() {
 
         val intent = intent
         val action = intent.action
-        var uri : Uri? = null
+        var uri: Uri? = null
 
         if (Intent.ACTION_VIEW == action) {
-             uri = intent.data
+            uri = intent.data
         }
 
 
@@ -80,16 +83,37 @@ fun MainFunction(VideoUri: Uri? = null) {
         SimpleExoPlayer.Builder(context).build().apply {
         }
     }
-    Column() {
-        Box(modifier = Modifier.weight(4f)){
-            VideoPlayer(MainActivity.exoplayer, MainActivity.Uri)
-        }
+    Scaffold(topBar = {
+        TopAppBar(
+            title = { Text("VideoScreenshotter") },
+            actions = {
+                SoundIconButton(onClick = {
+                    context.startActivity(
+                        Intent(
+                            context,
+                            OssLicensesMenuActivity::class.java
+                        )
+                    )
+                })
 
-        Box(modifier = Modifier.weight(1f)){
-            OpenDocumentPicker()
-        }
+                {
+                    Icon(Icons.Filled.Settings, contentDescription = "Settings")
+                }
+            }
+        )
+    }) {
+        Column() {
+            Box(modifier = Modifier.weight(4f)) {
+                VideoPlayer(MainActivity.exoplayer, MainActivity.Uri)
+            }
 
+            Box(modifier = Modifier.weight(1f)) {
+                OpenDocumentPicker()
+            }
+
+        }
     }
+
 
 }
 
@@ -113,38 +137,37 @@ private fun OpenDocumentPicker() {
         modifier = Modifier.fillMaxSize()
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Button(
-                onClick = { MainActivity.exoplayer.seekTo(MainActivity.exoplayer.currentPosition-10) }
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            SoundButton(
+                onClick = { MainActivity.exoplayer.seekTo(MainActivity.exoplayer.currentPosition - 10) }
             ) {
                 Text(text = "-10ms")
             }
-            Button(
+            SoundButton(
                 onClick = { launcher.launch(arrayOf("video/*")) }
             ) {
                 Text(text = "Open video")
             }
-            Button(
-                onClick = {MainActivity.exoplayer.seekTo(MainActivity.exoplayer.currentPosition+10)  }
+            SoundButton(
+                onClick = { MainActivity.exoplayer.seekTo(MainActivity.exoplayer.currentPosition + 10) }
             ) {
                 Text(text = "+10ms")
             }
         }
 
 
-
-
         //Todo: get recycle video filename here
-        Button(
+        SoundButton(
             onClick = {
                 try {
                     val documentFile = DocumentFile.fromSingleUri(context, MainActivity.Uri.value!!)
                     var filename = documentFile!!.name?.substringBeforeLast(".")
                     filename += "-" + MainActivity.exoplayer.currentPosition.toString() + ".png";
                     launchercreate.launch(filename)
-                }
-                catch (e: Exception){
-                    Toast.makeText(context,"You probably did not open a video",Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    Toast.makeText(context, "You probably did not open a video", Toast.LENGTH_SHORT)
+                        .show()
                 }
 
             },
