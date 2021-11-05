@@ -1,0 +1,1 @@
+VideoScrenshotter is a simple android app to create screenshots from videos while retaining full quality
